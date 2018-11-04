@@ -1,0 +1,21 @@
+{% extends 'layouts/app.html' %}
+{% block content %}
+<h1>BLOG DES LHASSA</h1>
+
+<h2> nombre de posts : {{ posts|length }} </h2>
+
+<article>
+<!-- 	on parcour la variable -->
+	{% for posts in posts %}
+
+		<a href="/blog/posts/{{ posts.id }}">
+			<h2>{{ posts.title|upper }}</h2>
+		</a>
+
+		<p> {{ posts.content }} </p>
+
+		<hr>
+
+	{% endfor %}
+</article>
+{% endblock content %}
