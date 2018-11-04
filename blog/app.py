@@ -4,8 +4,11 @@ from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database/apso.sqlite3'
+
 db = SQLAlchemy(app)
+db.init_app(app)
 
 app = Flask(__name__)
 
@@ -16,7 +19,7 @@ class Post(db.Model):
     content = db.Column(db.String(255), unique=True, nullable=False)
     
     def __repr__(self):
-        return '<User %r>' % self.username
+        return '<Post {}>'.format(self.title)
 
 @app.context_processor
 def inject_now():
@@ -36,12 +39,12 @@ def contact():
 
 @app.route("/blog")
 def blog():
-	posts = Post.all()
+	posts = Post.query.all()
 	return render_template("posts/blog.html" , posts = posts)
 
 @app.route("/blog/posts/<int:id>")
 def posts(id):
-	post = Post.find(id)
+	post = Post.query.get(id)
 	print(id)
 	return render_template("posts/show.html" , post = post)
 
